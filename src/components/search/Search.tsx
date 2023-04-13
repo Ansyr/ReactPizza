@@ -10,16 +10,17 @@ export const Search = () => {
   const [value, setValue] = React.useState<string>("");
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  const onSearch = (value: string) => {
+    dispatch(setSearchValue(value));
+  };
   const onClickClear = (event: React.MouseEvent<SVGSVGElement>) => {
-    console.log(event);
-    dispatch(setSearchValue(""));
     setValue("");
     // if (inputRef.current) {
     //   inputRef.current.focus();
     // }
     inputRef.current?.focus();
   };
-  const updateSearchValue = useDebounce(dispatch(setSearchValue(value)), 500);
+  const updateSearchValue = useDebounce(onSearch, 300);
 
   const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);

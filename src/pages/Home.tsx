@@ -1,24 +1,30 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import {
+import FilterSlice, {
+  FilterSliceState,
   selectFilter,
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
-import Sort, { sortList } from "../components/Sort";
+import { SortPopup, sortList } from "../components/SortPopup";
 import "../scss/app.scss";
 import Skeleton from "../components/pizzaBlock/Skeleton";
 import Categories from "../components/Categories";
 import { Pagination } from "../components/pagination/Pagination";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzasSlice";
+import {
+  fetchPizzas,
+  SearchPizzaParams,
+  selectPizzaData,
+} from "../redux/slices/pizzasSlice";
+import { useAppDispatch } from "../redux/store";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = React.useRef(false);
 
   const isMounted = React.useRef(false);
@@ -37,13 +43,12 @@ export const Home = () => {
 
   const getPizzas = async () => {
     dispatch(
-      //   @ts-ignore
       fetchPizzas({
         sortBy,
         order,
         category,
         search,
-        currentPage,
+        currentPage: String(currentPage),
       })
     );
 
@@ -56,23 +61,24 @@ export const Home = () => {
   const search = searchValue ? `&search=${searchValue}` : "";
 
   // Если был первый рендер, то проверяем URL параметры и сохраняем в redux
-  React.useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-
-      const sort = sortList.find(
-        (obj) => obj.sortProperty === params.sortProperty
-      );
-
-      dispatch(
-        setFilters({
-          ...params,
-          sort,
-        })
-      );
-      isSearch.current = true;
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(
+  //       window.location.search.substring(1)
+  //     ) as unknown as SearchPizzaParams;
+  //
+  //     const sort = sortList.find((obj) => obj.sortProperty === params.sortBy);
+  //     dispatch(
+  //       setFilters({
+  //         searchValue: params.search,
+  //         categoryId: Number(params.category),
+  //         currentPage: Number(params.currentPage),
+  //         sort: sort || sortList[0],
+  //       })
+  //     );
+  //     isSearch.current = true;
+  //   }
+  // }, []);
   // Если был первый рендер, то запрашиваем все пииццы
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -83,27 +89,27 @@ export const Home = () => {
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   // Если изменили параметры и был первый рендер
-  React.useEffect(() => {
-    if (isMounted.current) {
-      const queryString = qs.stringify({
-        sortProperty: sort.sortProperty,
-        categoryId,
-        currentPage,
-      });
-      navigate(`?${queryString}`);
-    }
-    isMounted.current = true;
-  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+  // React.useEffect(() => {
+  //   if (isMounted.current) {
+  //     const queryString = qs.stringify({
+  //       sortProperty: sort.sortProperty,
+  //       categoryId,
+  //       currentPage,
+  //     });
+  //     navigate(`?${queryString}`);
+  //   }
+  //   if (!window.location.search) {
+  //     dispatch(fetchPizzas({} as SearchPizzaParams));
+  //   }
+  //
+  //   isMounted.current = true;
+  // }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   const pizzas = items
     .filter((obj: any) =>
       obj.title.toLowerCase().includes(searchValue.toLowerCase())
     )
-    .map((obj: any) => (
-      <Link key={obj.id} to={`pizza/${obj.id}`}>
-        <PizzaBlock {...obj} />
-      </Link>
-    ));
+    .map((obj: any) => <PizzaBlock {...obj} key={obj.id} />);
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -114,7 +120,7 @@ export const Home = () => {
           value={categoryId}
           onChangeCategory={(id: number) => onChangeCategory(id)}
         />
-        <Sort />
+        <SortPopup />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
