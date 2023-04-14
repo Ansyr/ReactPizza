@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./search.module.scss";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useDispatch } from "react-redux";
-import { setSearchValue } from "../../redux/slices/filterSlice";
+import { setSearchValue } from "../../redux/filter/slice";
 
 export const Search = () => {
   const dispatch = useDispatch();

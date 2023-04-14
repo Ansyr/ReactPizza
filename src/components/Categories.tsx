@@ -12,7 +12,7 @@ const categories = [
   "Острые",
   "Закрытые",
 ];
-const Categories = (props: CategoriesProps) => {
+const Categories = React.memo((props: CategoriesProps) => {
   const { value, onChangeCategory } = props;
 
   return (
@@ -30,6 +30,6 @@ const Categories = (props: CategoriesProps) => {
       </ul>
     </div>
   );
-};
+});
 
 export default Categories;

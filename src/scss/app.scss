@@ -16,8 +16,8 @@ body {
   max-width: 1400px;
 
   @media (max-width: 645px) {
-   width: calc(100vw - 30px);
-   margin-top: 15px;
+    width: calc(100vw - 30px);
+    margin-top: 15px;
   }
 }
 
@@ -25,17 +25,17 @@ body {
   padding: 40px 0;
   text-align: center;
 
-  &__error-info{
+  &__error-info {
     margin: 100px auto;
     width: 500px;
 
-    h2:{
+    h2: {
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 10px;
     }
 
-    p:{
+    p: {
       font-size: 22px;
     }
   }
@@ -81,6 +81,7 @@ body {
       }
       .sort {
         padding-left: 20px;
+
         b {
           display: none;
         }
@@ -93,10 +94,10 @@ body {
       }
     }
     @media (max-width: 760px) {
-      
+
       .categories {
-        ul{
-          li{
+        ul {
+          li {
             padding: 8px 20px;
           }
         }
@@ -112,9 +113,10 @@ body {
   &--cart {
     max-width: 820px;
     margin: 90px auto;
+
     .content__title {
       margin: 0;
-     
+
     }
   }
 }
@@ -137,6 +139,7 @@ body {
       width: 30px;
       height: 30px;
       margin-right: 10px;
+
       path {
         stroke: $black;
         stroke-width: 1.9;
@@ -169,15 +172,17 @@ body {
           stroke: darken($color: #b6b6b6, $amount: 50);
         }
       }
+
       span {
         color: darken($color: #b6b6b6, $amount: 50);
       }
     }
   }
 
-  .content__items{
+  .content__items {
     display: block
   }
+
   &__item {
     display: flex;
     width: 100%;
@@ -185,7 +190,7 @@ body {
     padding-top: 30px;
     margin-top: 30px;
 
-    
+
     &-img {
       display: flex;
       align-items: center;
@@ -229,6 +234,25 @@ body {
             display: none;
           }
         }
+        &:active{
+          transform: none;
+        }
+        &:disabled {
+          opacity: 0.4;
+          border-color: #787878;
+
+          &:hover {
+            background-color: transparent;
+            svg path {
+              fill: #787878
+            }
+          }
+
+          svg path {
+            fill: #787878
+          }
+        }
+
       }
 
       b {
@@ -273,6 +297,7 @@ body {
           height: 11.5px;
           position: relative;
         }
+
         &:hover,
         &:active {
           border-color: darken($color: $gray-line, $amount: 80);
@@ -330,6 +355,7 @@ body {
 
         svg {
           margin-right: 12px;
+
           path {
             fill: transparent;
             stroke-width: 2;

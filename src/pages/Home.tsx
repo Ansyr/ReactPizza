@@ -2,28 +2,22 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import FilterSlice, {
-  FilterSliceState,
-  selectFilter,
-  setCategoryId,
-  setCurrentPage,
-  setFilters,
-} from "../redux/slices/filterSlice";
+
 import PizzaBlock from "../components/pizzaBlock/PizzaBlock";
-import { SortPopup, sortList } from "../components/SortPopup";
+import { SortPopup } from "../components/SortPopup";
 import "../scss/app.scss";
 import Skeleton from "../components/pizzaBlock/Skeleton";
 import Categories from "../components/Categories";
 import { Pagination } from "../components/pagination/Pagination";
-import {
-  fetchPizzas,
-  SearchPizzaParams,
-  selectPizzaData,
-} from "../redux/slices/pizzasSlice";
+import { fetchPizzas } from "../redux/pizza/asyncActions";
+
 import { useAppDispatch } from "../redux/store";
+import { selectFilter } from "../redux/filter/selector";
+import { setCategoryId, setCurrentPage } from "../redux/filter/slice";
+import { selectPizzaData } from "../redux/pizza/selector";
 
 export const Home = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isSearch = React.useRef(false);
 
@@ -33,9 +27,10 @@ export const Home = () => {
     useSelector(selectFilter);
 
   const { items, status } = useSelector(selectPizzaData);
-  const onChangeCategory = (id: number) => {
+
+  const onChangeCategory = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  }, []);
 
   const onChagePage = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -116,11 +111,8 @@ export const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categoryId}
-          onChangeCategory={(id: number) => onChangeCategory(id)}
-        />
-        <SortPopup />
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+        <SortPopup value={sort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === "error" ? (
