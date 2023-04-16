@@ -11,6 +11,7 @@ export type Pizza = {
 export interface PizzaSliceState {
   items: Pizza[];
   status: Status;
+  inited: boolean;
 }
 
 export enum Status {

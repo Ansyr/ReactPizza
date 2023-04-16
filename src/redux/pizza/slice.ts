@@ -5,6 +5,7 @@ import { fetchPizzas } from "./asyncActions";
 export const initialState: PizzaSliceState = {
   items: [],
   status: Status.LOADING, //Loading | success | error
+  inited: false,
 };
 
 const pizzaSlice = createSlice({
@@ -13,6 +14,10 @@ const pizzaSlice = createSlice({
   reducers: {
     setItems(state, action: PayloadAction<Pizza[]>) {
       state.items = action.payload;
+    },
+
+    setInited(state, action: PayloadAction<boolean>) {
+      state.inited = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -31,6 +36,6 @@ const pizzaSlice = createSlice({
   },
 });
 
-export const { setItems } = pizzaSlice.actions;
+export const { setItems, setInited } = pizzaSlice.actions;
 
 export default pizzaSlice.reducer;
